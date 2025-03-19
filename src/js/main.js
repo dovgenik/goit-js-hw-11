@@ -31,17 +31,19 @@ function axiosCall(text, pageN, pageL) {
 let observer = new MutationObserver(mutationRecords => {
   console.log(mutationRecords[0].type); // тип мутації
   console.log(mutationRecords[0].target); // об'єкт мутації
-  // далі  - додано чи видалено, або і те і те 
+  // далі  - додано чи видалено, або і те і те
   console.log(
-    mutationRecords[0].addedNodes.length > 0 || mutationRecords[0].removedNodes.length > 0
-      ? 'Added / Removed'
+    mutationRecords[0].addedNodes.length > 0 ||
+      mutationRecords[0].removedNodes.length > 0
+      ? 'Added  Removed'
       : mutationRecords[0].removedNodes.length > 0
       ? 'Remove'
-      : mutationRecords[0].addedNodes.length > 0 
+      : mutationRecords[0].addedNodes.length > 0
       ? 'Added'
+      : ''
   );
 });
-// вказує на чому відслідковувати мутації раніше створеному observer = new MutationObserver() 
+// вказує на чому відслідковувати мутації раніше створеному observer = new MutationObserver()
 observer.observe(document.querySelector('.for-mutation-observer'), {
   childList: true,
   subtree: true,
