@@ -22,11 +22,12 @@ function createGalleryItem(arrayImgs) {
     const fragment = document.createDocumentFragment();
     const parentUl = document.querySelector('.gallery');
 
+    
+
     for (const element of arrayImgs) {
       
-      const li = document.createElement('li');
-      li.classList.add('gallery-item');
-
+      li.classList.add('.gallery-item');
+      
       li.innerHTML = `<div class="gallery-div">
         <a class="gallery-link" href="${element.largeImageURL}">
           <img class="gallery-image" src="${element.webformatURL}" alt="${element.tags}">

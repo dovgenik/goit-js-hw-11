@@ -1,53 +1,56 @@
-import iziToast from 'izitoast';
-import 'izitoast/dist/css/iziToast.min.css';
 import axios from 'axios';
+import { createGalleryItem, deleteGalleryItem } from './render-functions.js';
 
+let textSearch = 'rhododendron';
+let pageNum = 1;
+let pageLen = 40;
 
-import { createGalleryItem} from "./1-gallery.js";
-const state = {
-  images: []
-}
-
-function axiosCall() {
+function axiosCall(text, pageN, pageL) {
   axios
     .get('https://pixabay.com/api/', {
       params: {
         key: '49309273-01bbbdbc5dd72a8afdb67bc06',
-        q: 'mountain+alpinism', //yellow+flowers
+        q: text,
         image_type: 'photo',
-        page: 2,
-        per_page: 30,
+        orientation: 'horizontal',
+        safesearch: true,
+        page: pageN,
+        per_page: pageL,
       },
     })
     .then(response => {
-      state.images = response.data.hits;
-      
-      createGalleryItem(state.images);
+      createGalleryItem(response.data.hits);
     })
     .catch(error => {
       console.log(error);
     });
 }
 
-axiosCall();
+// *****************************************************************************
+// відслідковує мутації і щось виконає, отримуючі інф. про мутацію
+let observer = new MutationObserver(mutationRecords => {
+  console.log(mutationRecords[0].type); // тип мутації
+  console.log(mutationRecords[0].target); // об'єкт мутації
+  // далі  - додано чи видалено, або і те і те 
+  console.log(
+    mutationRecords[0].addedNodes.length > 0 || mutationRecords[0].removedNodes.length > 0
+      ? 'Added / Removed'
+      : mutationRecords[0].removedNodes.length > 0
+      ? 'Remove'
+      : mutationRecords[0].addedNodes.length > 0 
+      ? 'Added'
+  );
+});
+// вказує на чому відслідковувати мутації раніше створеному observer = new MutationObserver() 
+observer.observe(document.querySelector('.for-mutation-observer'), {
+  childList: true,
+  subtree: true,
+});
 
+document.querySelector('.form').addEventListener('submit', function (event) {
+  event.preventDefault();
+  deleteGalleryItem();
+  axiosCall(event.target.elements['search-text'].value, 5, 39);
+});
 
-// const inputDate = document.querySelector('.search-text');
-// const promisForm = document.querySelector('.form');
-
-// promisForm.addEventListener('submit', event => {
-//   event.preventDefault();
-
-//   const formData = new FormData(event.target);
-//   const data = Object.fromEntries(formData.entries());
-
-//   makePromise(data.delay, data.state === 'fulfilled' ? true : false)
-//     .then(value =>
-//       iziToast.success({ message: `✅ Fulfilled promise in ${value}ms` })
-//     )
-//     .catch(error =>
-//       iziToast.error({ message: `❌ Rejected promise in ${error}ms` })
-//     );
-
-//   promisForm.reset();
-// });
+//axiosCall(textSearch, pageNum, pageLen);

@@ -11,13 +11,15 @@ import 'simplelightbox/dist/simple-lightbox.min.css';
 //     closeText: "×", // Кнопка закриття
 // });
 
-document.addEventListener("DOMContentLoaded", function () {
-  const lightbox = new SimpleLightbox(".gallery a", {
-      captions: true,
-      captionsData: "alt",
-      captionDelay: 250,
-      animationSpeed: 300,
-      fadeSpeed: 300
+document.addEventListener('DOMContentLoaded', function () {
+  const lightbox = new SimpleLightbox('.gallery a', {
+    captions: true,
+    captionsData: 'alt',
+    captionDelay: 250,
+    showCounter: true, // Відображення лічильника зображень
+    disableScroll: true, // Вимкнення прокрутки сторінки при відкритті лайтбоксу
+    navText: ['←', '→'], // Налаштування стрілок навігації
+    closeText: '×', // Кнопка закриття
   });
 });
 
@@ -59,4 +61,3 @@ export function createGalleryItem(arrayImgs) {
 
   perentUl.appendChild(fragment);
 }
-
