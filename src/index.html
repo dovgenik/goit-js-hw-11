@@ -8,19 +8,26 @@
     <link rel="stylesheet" href="./css/styles.css" />
   </head>
   <body>
-
     <main>
       <div class="container-form">
         <form class="form">
-        <label>
-          <input type="text" name="search-text" placeholder="Search images..." required>
-        </label>
-        <button type="submit">Search</button>
-      </form>
-</div>
-<div class="for-mutation-observer">
-      <ul class="gallery"></ul>
+          <label>
+            <input
+              type="text"
+              name="search-text"
+              placeholder="Search images..."
+              required
+            />
+          </label>
+          <button type="submit">Search</button>
+        </form>
       </div>
+      <div class="intersection-top marker-top"></div>
+      <div class="for-mutation-observer">
+        <ul class="gallery"></ul>
+      </div>
+       <div class="intersection-bottom marker-bottom"></div>
+      <span class="loader">L &nbsp; ading</span>
     </main>
     <script type="module" src="./js/main.js"></script>
     <script type="module" src="./js/render-functions.js"></script>

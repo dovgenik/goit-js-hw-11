@@ -2,8 +2,23 @@ import iziToast from 'izitoast';
 import 'izitoast/dist/css/iziToast.min.css';
 import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
-export { createGalleryItem, deleteGalleryItem };
+import { observerIntersection } from './main.js';
+
+export { createGalleryItem, deleteGalleryItem};
 let lightbox;
+
+//**********************************  IntersectionObserver  // поява обєкта в полі видимості*************************************************
+const callbackIntersection = (entries, observer) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      console.log(`Елемент "${entry.target.classList[1]}" тут`);
+    } else {
+      console.log(`Елемент "${entry.target.classList[1]}" пішов геть`);
+    }
+  });
+};
+
+
 
 function deleteGalleryItem() {
   document.querySelector('.gallery').outerHTML = `<ul class="gallery"></ul>`;
@@ -21,12 +36,11 @@ function createGalleryItem(arrayImgs) {
   } else {
     const fragment = document.createDocumentFragment();
     const parentUl = document.querySelector('.gallery');
-
+    
     for (const element of arrayImgs) {
-      
       const li = document.createElement('li');
       li.classList.add('gallery-item');
-
+      
       li.innerHTML = `<div class="gallery-div">
         <a class="gallery-link" href="${element.largeImageURL}">
           <img class="gallery-image" src="${element.webformatURL}" alt="${element.tags}">
@@ -44,6 +58,9 @@ function createGalleryItem(arrayImgs) {
 
     parentUl.appendChild(fragment);
 
+    observerIntersection.observe(document.querySelector(['.marker-top']));
+    observerIntersection.observe(document.querySelector(['.marker-bottom']));
+
     // Оновлюємо SimpleLightbox після додавання зображень
     if (lightbox) {
       lightbox.refresh();
@@ -60,3 +77,8 @@ function createGalleryItem(arrayImgs) {
     }
   }
 }
+
+
+
+//observerIntersection.observe(document.querySelector('.marker'));
+//observerIntersection.observe(document.querySelector('.marker12'));
