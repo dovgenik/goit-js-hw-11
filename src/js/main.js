@@ -1,4 +1,4 @@
-import {mainVar, createGalleryItem, deleteGalleryItem, intersectionSet, lightboxRefresh,axiosCall,  page, } from './render-functions.js';
+import {mainVar, createGalleryItem, deleteGalleryItem, intersectionSet, lightboxRefresh,axiosCall, } from './render-functions.js';
 
 
 
@@ -11,7 +11,9 @@ document.querySelector('.form').addEventListener('submit', function (event) {
   event.preventDefault();
   deleteGalleryItem();
   mainVar.searchText=event.target.elements['search-text'].value;
-  axiosCall(mainVar.searchText, page, 18);
+  mainVar.direction = 'toBottom';
+  mainVar.carrentPage = 1;
+  axiosCall(mainVar.searchText, mainVar.carrentPage, mainVar.pageLen);
 });
 
 //***************************************************** 
