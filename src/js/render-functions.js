@@ -1,8 +1,9 @@
-import axios from 'axios';
 import iziToast from 'izitoast';
 import 'izitoast/dist/css/iziToast.min.css';
 import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
+
+import {axiosCall, } from './pixabay-api.js';
 
 export const mainVar = {
   searchText: '',
@@ -16,43 +17,25 @@ export {
   deleteGalleryItem,
   intersectionSet,
   lightboxRefresh,
-  axiosCall,
+  axiosAfterTthenCall,
 };
 
 let lightbox;
 
-function axiosCall(text, pageN, pageL) {
-  if (pageN > 0 && pageL > 0) {
-    axios
-      .get('https://pixabay.com/api/', {
-        params: {
-          key: '49309273-01bbbdbc5dd72a8afdb67bc06',
-          q: text,
-          image_type: 'photo',
-          orientation: 'horizontal',
-          safesearch: true,
-          page: pageN,
-          per_page: pageL,
-        },
-      })
-      .then(response => {
-        createGalleryItem(response.data.hits);
 
+function axiosAfterTthenCall(responseDataHits) {
+        createGalleryItem(responseDataHits);
         lightboxRefresh();
-      })
-      .catch(error => {
-        console.log(error);
-      });
-  }
-}
+};
+
 
 function deleteGalleryItem() {
   document.querySelector('.gallery').outerHTML = `<ul class="gallery"></ul>`;
-}
+};
 
 function createGalleryItem(arrayImgs) {
   if (arrayImgs.length < 1) {
-    iziToast.info({
+    iziToast.error({
       message:
         'Sorry, there are no images matching your search query. Please try again!',
       close: true,
@@ -142,13 +125,13 @@ function intersectionSet() {
     if (situation.markerBottom && !situation.markerTop) {
       // якщо дійшли до низу
       mainVar.direction = 'toBottom'; // зовнішній маркер для інших учасників
-      axiosCall(mainVar.searchText, ++mainVar.carrentPage, mainVar.pageLen); // додаю записи знизу
+      axiosCall(mainVar.searchText, ++mainVar.carrentPage, mainVar.pageLen, axiosAfterTthenCall); // додаю записи знизу
     } else {
       if (!situation.markerBottom && situation.markerTop) {
         // якщо дійшли до верху
         mainVar.direction = 'toTop'; // зовнішній маркер для інших учасників
         if (mainVar.carrentPage > 3) { // контроль номера сторінки, щоб не було 0, -1, і т.д.
-          axiosCall(mainVar.searchText, --mainVar.carrentPage - 2, mainVar.pageLen  ); // додаю записи зверху
+          axiosCall(mainVar.searchText, --mainVar.carrentPage - 2, mainVar.pageLen, axiosAfterTthenCall  ); // додаю записи зверху
         }
       }
     }
@@ -178,5 +161,3 @@ function lightboxRefresh() {
   }
 }
 
-//observerIntersection.observe(document.querySelector('.marker'));
-//observerIntersection.observe(document.querySelector('.marker12'));
