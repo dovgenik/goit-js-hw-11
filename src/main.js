@@ -1,5 +1,5 @@
-import {mainVar, createGalleryItem, deleteGalleryItem, intersectionSet, lightboxRefresh, axiosAfterTthenCall,} from './render-functions.js';
-import {axiosCall, } from './pixabay-api.js';
+import {mainVar, createGalleryItem, deleteGalleryItem, intersectionSet, lightboxRefresh, axiosAfterTthenCall,} from './js/render-functions.js';
+import {axiosCall, } from './js/pixabay-api.js';
 
 
 //*********   Start  ********************************************
