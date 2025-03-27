@@ -1,3 +1,5 @@
+import iziToast from 'izitoast';
+import 'izitoast/dist/css/iziToast.min.css';
 import axios from 'axios';
 
 export { axiosCall };
@@ -21,7 +23,11 @@ function axiosCall(text, pageN, pageL, thenCall) {
         thenCall(response.data.hits);
       })
       .catch(error => {
-        console.log(error);
+        iziToast.error({
+          title: 'Помилка!',
+          message: error.message,
+          position: 'topRight',
+        });
       })
       .finally(() => {
         document.querySelector('.loader').classList.toggle('visually-hidden');

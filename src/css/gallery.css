@@ -139,7 +139,8 @@ body {
     z-index: 1001;
     position: fixed;
     top: 0px;
-    left: 50vh;
+    left: 50vh; 
+    
     transform: translate(50%, 0);
     padding-top: 10px;
     padding-bottom: 10px;

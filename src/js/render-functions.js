@@ -15,7 +15,6 @@ export const mainVar = {
 export {
   createGalleryItem,
   deleteGalleryItem,
-  intersectionSet,
   lightboxRefresh,
   axiosAfterTthenCall,
 };
@@ -64,85 +63,12 @@ function createGalleryItem(arrayImgs) {
 
       fragment.appendChild(li);
     }
-    console.log(`Додавав ${mainVar.direction}`);
+    parentUl.appendChild(fragment);
 
-    if (mainVar.direction === 'toBottom') {
-      console.log(`To bottom ${fragment}`);
-      parentUl.appendChild(fragment);
-
-      console.log(`Галерея after add = ${parentUl.children.length} елементів`);
-
-      while (parentUl.children.length > mainVar.maxItems) {
-        // видаляю зайві попереду галереї
-        parentUl.removeChild(parentUl.firstElementChild);
-      }
-      console.log(
-        `Gallery after del from bottom = ${parentUl.children.length} elements`
-      );
-    } else {
-      if (mainVar.direction === 'toTop') {
-        const scrollBefore = parentUl.scrollHeight;
-        parentUl.prepend(fragment); // add to top
-
-        const scrollAfter = parentUl.scrollHeight;
-        window.scrollBy(0, scrollAfter - scrollBefore);
-
-        while (parentUl.children.length > mainVar.maxItems) {
-          // видаляю зайві у кінці галереї
-          parentUl.removeChild(parentUl.lastElementChild);
-        }
-        console.log(
-          `Gallery after del from bottom = ${parentUl.children.length} elements`
-        );
-      }
-    }
+    
   }
 }
 
-function intersectionSet() {
-  let galleryLength = 0;
-  mainVar.runStarted = true;
-  const observerIntersection = new IntersectionObserver((entries, observer) => {
-    const situation = {
-      // для контролю положення маркерів div class="intersection-top marker-top" і div class="intersection-bottom marker-bottom"
-      markerTop: false,
-      markerBottom: false,
-    };
-    entries.forEach(entry => {
-      // для кожного контрол. елемента визначаю положення: тут, тобто isIntersecting, чи ні
-      if (entry.isIntersecting) {
-        console.log(entry.target.classList[1]);
-        if (entry.target.classList[1] === 'marker-top') {
-          situation.markerTop = true;
-        } else {
-          if (entry.target.classList[1] === 'marker-bottom') {
-            situation.markerBottom = true;
-          }
-        }
-      }
-    });
-    // визначаю куди проскролили галерею
-    if (situation.markerBottom && !situation.markerTop) {
-      // якщо дійшли до низу
-      mainVar.direction = 'toBottom'; // зовнішній маркер для інших учасників
-      axiosCall(mainVar.searchText, ++mainVar.carrentPage, mainVar.pageLen, axiosAfterTthenCall); // додаю записи знизу
-    } else {
-      if (!situation.markerBottom && situation.markerTop) {
-        // якщо дійшли до верху
-        mainVar.direction = 'toTop'; // зовнішній маркер для інших учасників
-        if (mainVar.carrentPage > 3) { // контроль номера сторінки, щоб не було 0, -1, і т.д.
-          axiosCall(mainVar.searchText, --mainVar.carrentPage - 2, mainVar.pageLen, axiosAfterTthenCall  ); // додаю записи зверху
-        }
-      }
-    }
-
-    console.log(situation);
-    console.log(`Page = ${mainVar.carrentPage} `);
-  });
-
-  observerIntersection.observe(document.querySelector(['.marker-top']));
-  observerIntersection.observe(document.querySelector(['.marker-bottom']));
-}
 
 function lightboxRefresh() {
   // Оновлюємо SimpleLightbox після додавання зображень
